@@ -22,5 +22,6 @@ public class BbsController {
     public String jayBranch(){
         return "/jay/jaySession";
     }
+    //너무짜증나ㅇㅇㅇ
 
 }
