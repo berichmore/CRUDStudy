@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board.crud.bbs.dao.BbsDao">
+
+<!--    게시물 수 -->
+    <select id="selectBbsCount" resultType="int">
+        select count(*) from bbs
+    </select>
+
+    <select id="selectBbsListPaging" resultType="board.crud.bbs.domain.Bbs">
+        select seq,
+               id,
+               ref,
+               depth,
+               title,
+               content,
+               created_at AS createdAt,
+               del,
+               read_count AS readCount,
+               like_count AS likeCount
+
+        from bbs
+        order by seq desc
+        limit #{offset}, #{size}
+
+    </select>
+
+    <select id="selectBbsList" resultType="board.crud.bbs.domain.Bbs">
+        select
+            seq,
+            id,
+            ref,
+            step,
+            depth,
+            title,
+            content,
+            created_at AS createdAt,
+            del,
+            read_count AS readCount,
+            like_count AS likeCount
+        from bbs
+        order by seq desc
+    </select>
+
+
+
+
+<!--    id로 검색-->
+
+    <select id="selectBbsById" resultType="board.crud.bbs.domain.Bbs">
+        select
+            seq,
+            id,
+            ref,
+            step,
+            depth,
+            title,
+            content,
+            created_at AS createdAt,
+            del,
+            read_count AS readCount
+        from bbs
+        where id = #{id}
+    </select>
+
+
+<!--    // seq로 검색-->
+    <select id="selectBbsBySeq" resultType="board.crud.bbs.domain.Bbs">
+        select
+            seq,
+            id,
+            ref,
+            step,
+            depth,
+            title,
+            content,
+            created_at AS createdAt,
+            del,
+            read_count AS readCount
+        from bbs
+        where seq = #{seq}
+    </select>
+
+    <insert id="insertBbs" parameterType="board.crud.bbs.domain.Bbs">
+        insert into bbs(id, ref, step,depth,title, content,created_at,del,read_count)
+        values (#{id},#{ref},#{step},#{depth},#{title},#{content},now(),#{del},#{readCount})
+    </insert>
+
+<!--    ref-->
+    <update id="updateRef" parameterType="int">
+        update bbs
+        set ref = #{seq}
+        where seq = #{seq}
+    </update>
+
+
+
+    <update id="updateBbs" parameterType="board.crud.bbs.domain.Bbs">
+        update bbs
+        set
+            id = #{id},
+            ref = #{ref},
+            step = #{step},
+            depth = #{depth},
+            title = #{title},
+            content = #{content},
+            del = #{del},
+            read_count = #{readCount}
+        where seq = #{seq}
+    </update>
+
+    <delete id="deleteBbs" parameterType="int">
+        delete from bbs
+        where seq = #{seq}
+    </delete>
+
+
+<!--    게시물 조회 카운트-->
+    <update id="increaseReadCount" parameterType="int">
+        update bbs
+        set read_count = read_count + 1
+        where seq = #{seq}
+
+    </update>
+
+<!--    검색 기능-->
+    <select id="searchBbs" resultType="board.crud.bbs.domain.Bbs">
+        select
+            seq, id, ref, step, depth,title,content, created_at,
+            del, read_count AS readCount
+        from bbs
+        <where>
+            <choose>
+                <when test="type == 'title'">
+                    title like concat('%', #{keyword}, '%')
+                </when>
+                <when test="type == 'content'">
+                    content like concat('%', #{keyword}, '%')
+                </when>
+                <when test="type == 'id'">
+                    id like concat('%', #{keyword},'%')
+                </when>
+                <otherwise>
+                    1 = 1
+                </otherwise>
+            </choose>
+        </where>
+        order by seq desc
+
+    </select>
+
+    <update id="decreaseLIkeCount" parameterType="int">
+        update bbs
+        set like_count = like_count - 1
+        where seq = #{bbsSeq}
+    </update>
+
+    <update id="increaseLikeCount" parameterType="int">
+    update bbs
+    set like_count = like_count +1
+    where seq = #{bbsSeq}
+    </update>
+
+    <update id="decreaseLikeCount" parameterType="int">
+    update bbs
+    set like_count = like_count -1
+    where seq = #{bbsSeq}
+    </update>
+
+</mapper>
+
+<!--<select id="BbsLikeExists" resultType="boolean">-->
+<!--select count(*) > 0-->
+<!--from bbs_like-->
+<!--where id = #{id} and bbs_seq = #{bbsSeq}-->
+<!--</select>-->
+<!--<insert id="BbsLikeInsert">-->
+<!--insert into bbs_like(id, bbs_seq)-->
+<!--values(#{id}, #{bbsSeq});-->
+<!--</insert>-->
+
+<!--<delete id="BbsLikeDelete">-->
+<!--delete from bbs_like-->
+<!--where id = #{id} and bbs_seq = #{bbsSeq};-->
+<!--</delete>-->
+
+<!--<update id="increaseLikeCount" parameterType="int">-->
+<!--update bbs-->
+<!--set like_count = like_count +1-->
+<!--where seq = #{bbsSeq}-->
+<!--</update>-->
+
+<!--<update id="decreaseLikeCount" parameterType="int">-->
+<!--update bbs-->
+<!--set like_count = like_count -1-->
+<!--where seq = #{bbsSeq}-->
+<!--</update>-->
+
+
+
+
+        <!--        selectBbsById-->
+        <!--        insertBbs-->
+        <!--        updateBbs-->
+        <!--        deleteBbs-->
