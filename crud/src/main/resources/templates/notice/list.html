@@ -1,13 +1,38 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>QnA</title>
+    <title>공지사항</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/notice.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 </head>
 <body>
-<h1>안녕하세요</h1>
+    <div class="container-notice-container">
+            <p class="title-lg">
+                Notice
+            </p>
+            <h1>안녕하세요</h1>
+
+            <div class="notice-wrapper">
+                <div class="notice-header">
+                    <div class="notice-col">번호</div>
+                    <div class="notice-col col-title">제목</div>
+                    <div class="notice-col col-date">등록일</div>
+                </div>
+                <div id="notice-content" class="notice-wrapper">
+                    <button id="write-btn">작성하기</button>
+                </div>
+                <div class="pagination notice-pagination">
+                    <button>페이지네이션 </button>
+                </div>
+            </div>
+    </div>
+
 </body>
 </html>

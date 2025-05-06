@@ -14,6 +14,7 @@ $(document).ready(function (){
                     // pathname : /부터 시작하는 경로부분만 가져옴
     const parts = path.split('/');
 
+
     // const parts = path.split('/'); 란?
     // path를 '/' 기준으로 나눠서 배열로 만드는 코드
     // 예시를 들어보자
@@ -34,7 +35,9 @@ $(document).ready(function (){
 
     // 왜 이렇게 쓰는 건가?
     // 이렇게 자른 이유는  -> 경로의 특정 위치 값을 확ㅇ니하거나 조건 처리하려고
-    // if(parts[1] === "notice" && !isNaN(parts[2])){
+    if(parts[1] === "notice" && !isNaN(parts[2])){
+        getList();
+    }
     //     getNoticeDetail(parts[2]); // "123"을 파라미터로 넘김
     // }
     // parts[1]  -> notice
@@ -46,3 +49,47 @@ $(document).ready(function (){
 
 
 /***************************************/
+
+//리스트 조회
+function getList(){
+    $.ajax({
+        url:`/api/notice/list`,
+        type:'GET',
+        initDataType: 'json',
+        success: function (data){
+            // data는 서버에서 보내준 JSON data를 의미함.
+
+            const $noticeList = $('#notice-content');
+            // $는 왜붙이나? jQuery객체라는 걸 명확하게 표시하기 위함
+            $noticeList.empty();
+            $.each(data, function(i,notice){
+                //jQuery의 $.each()는 자바스크립트의 반복문 역할을 대신하는 반복 유틸 함수임
+                // for, forEach, map 같은 느낌이지만 jQuery 스타일로 안전하고 범용적으로 동작함
+
+                const createdDate = notice.createdAt.split('T')[0];// 'YYYY-MM-DD'
+                // notice.createdAt -> ISO 8601 형식의 문자열로 날짜 + 시간이 들어가 있음
+                // 예 : "2024-05-07T13:25:30.000Z"
+                // .split('T')  T 문자를 기준으로 문자열을 두 조각으로 자른다
+                // "2024-05-07T13:25:30.000Z" -> "2024-05-07",  "13:25:30.000Z"
+                // 3. [0]
+                // 자른 결과 배열에서 앞쪽(날짜 부분)만 가져온다.
+                // 결과 : "2024-05-07
+
+                const html = `
+                        <div class="notice-list">
+                            <div class="notice-list">${notice.noticeSeq}</div>
+                            <div>
+                                  <a href="/notice/${notice.noticeSeq}"</a>
+                            </div>
+                            <div class="notice-col col-date">${createdDate}</div>
+            `;
+
+                $noticeList.append(html);
+
+
+            })
+
+
+        }
+    })
+}
