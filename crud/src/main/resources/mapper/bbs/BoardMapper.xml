@@ -18,7 +18,18 @@
                 OR writer LIKE CONCAT('%', #{keyword}, '%'))
         </if>
         ORDER BY board_id DESC
-        LIMIT   #{size} OFFSET #{getOffset}
+        LIMIT   #{size} OFFSET #{offset}
+    </select>
+    <select id="countAll" resultType="int">
+        SELECT
+                count(*)
+        FROM
+                board
+        WHERE is_deleted = 'N'
+        <if test="keyword != null and keyword != ''">
+            AND (title LIKE CONCAT('%', #{keyword}, '%')
+            OR writer LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
     </select>
 
 </mapper>

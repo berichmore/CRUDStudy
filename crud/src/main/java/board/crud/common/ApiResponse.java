@@ -1,14 +1,11 @@
 package board.crud.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 @Getter
 //@Setter   //ApiResponse는 변경될 일이 없으니 삭제해야함
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //외부에서 무분별한 생성을 막음
 @AllArgsConstructor
 public class ApiResponse<T> {
     private int status;      // success 또는 fail
