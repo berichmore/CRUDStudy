@@ -3,18 +3,29 @@ import axios from "axios";
 
 
 //해당 게시글 불러오기
-export const getBbsDetail = async (seq) => {
+// export const getBbsDetail = async (seq) => {
+//
+//     try {
+//         const res = await axios.get(`/bbs/seq/${seq}`);
+//         console.log(res.data);
+//         return res.data;
+//     }catch (error){
+//         console.error("게시글 조회 실패", error);
+//         throw error;
+//     }
+// }
 
+export const getBbsDetails = async(seq) => {
     try {
-        const res = await axios.get(`/bbs/seq/${seq}`);
-        console.log(res.data);
-        return res.data;
-    }catch (error){
-        console.error("게시글 조회 실패", error);
-        throw error;
+        const response = await axios.get(`/bbs/seq/${seq}`);
+        console.log(response.data);
+        return response.data;
+
+    } catch (error) {
+        console.log("게시글 조회 실패", error)
+        throw error
     }
 }
-
 
 //게시글 수정
 export const putBbsDetail = async (seq, updateData) => {
